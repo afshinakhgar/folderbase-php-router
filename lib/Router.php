@@ -52,6 +52,11 @@ class Router {
             }
         }
 
+
+        if(strlen($Adr[1]) == 0){
+            $this->page = '/';
+        }
+
         /*
             Parameters are some variables that pass with url
             ex . akhgar.net/name/afshin/lastname/akhgar

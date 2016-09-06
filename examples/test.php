@@ -20,6 +20,8 @@
 				My Name Is Afshin Akhgar, I am a happy php and javascript (web) developer.
 				afshin@akhgar.net
 			</code>
+
+			<img src="https://robohash.org/afshIn" alt="Afshin Akhgar">
 		</div>
 	</body>
 </html>

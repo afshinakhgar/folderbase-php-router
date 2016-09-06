@@ -14,5 +14,6 @@ require_once './lib/router.php';
 $router = new Router();
 return $router->go(array(
 	'afshin'=>'examples/afshin.php',
-	'/'=>'examples/afshin.php'
+	'/'=>'examples/afshin.php',
+	'test'=> 'examples/test.php'
 ));

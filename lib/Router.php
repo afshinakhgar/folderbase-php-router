@@ -20,10 +20,11 @@ class Router {
             $this->url_protocol = 'https://';
         }
         if($_SERVER["HTTP_HOST"]=='localhost'){
-            $this->siteUrl = 'http://localhost/git/movielister/';
+            $this->siteUrl = $this->url_protocol.$_SERVER['HTTP_HOST'].'/'.explode('/',$_SERVER['PHP_SELF'])[1].'/';
         } else {
             $this->siteUrl = $this->url_protocol.$_SERVER['HTTP_HOST'].'/';
         }
+
     }
     public function route($folder = false)
     {

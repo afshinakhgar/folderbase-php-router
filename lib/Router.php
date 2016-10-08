@@ -26,7 +26,7 @@ class Router {
         }
 
     }
-    public function route($folder = false)
+    public function route($routestr = '')
     {
         
         $siteUrl = trim($this->siteUrl,'/');
@@ -38,6 +38,7 @@ class Router {
         $Adr   = explode('/', $param);
 
         // calculation of query strings in url string
+
         if($Adr[1]){
             if(strpos($Adr[1], '?') !== false){
                 $addressParams = explode('?',$Adr[1]);
@@ -53,7 +54,15 @@ class Router {
             }
         }
 
+        // for sub url support
+        $urlStr = implode('/',$Adr);
+        $urlStr = (ltrim($urlStr,'/'));
+        if(isset($routestr[$urlStr])){
+            $this->page =$urlStr;
+        }
+        // sub/iran
 
+        // without route for home page
         if(strlen($Adr[1]) == 0){
             $this->page = '/';
         }
@@ -82,7 +91,7 @@ class Router {
     * @param array $routesArr 
     */
     public function go($routesArr){
-        $pageParamsArr = $this->route();
+        $pageParamsArr = $this->route($routesArr);
         if(!isset($routesArr[$this->page])){
             require($this->notfoundAddress);
             exit;

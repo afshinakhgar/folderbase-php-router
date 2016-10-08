@@ -53,7 +53,7 @@ class Router {
         $this->page = trim($routeAddress,'/');
 
 
-       if($queryString){
+       if(isset($queryString)){
             $queryStringArr = explode('&',$queryString);
             foreach($queryStringArr as $queryString){
                 $queryStringValKey = explode('=',$queryString);

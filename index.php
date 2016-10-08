@@ -16,5 +16,6 @@ return $router->go(array(
 	'afshin'=>'examples/afshin.php',
 	'/'=>'examples/afshin.php',
 	'test'=> 'examples/test.php',
-	'sub/iran' => 'examples/sub/iran.php'
+	'sub/iran' => 'examples/sub/iran.php',
+	'sub/subsub/module' => 'examples/sub/subsub/module/module.php',
 ));

@@ -38,30 +38,29 @@ class Router {
         $Adr   = explode('/', $param);
 
         // calculation of query strings in url string
-
-        if($Adr[1]){
-            if(strpos($Adr[1], '?') !== false){
-                $addressParams = explode('?',$Adr[1]);
-                $this->page = $Adr[1] = $addressParams[0];
-                $queryStringArr = explode('&',$addressParams[1]);
-                foreach($queryStringArr as $queryString){
-                    $queryStringValKey = explode('=',$queryString);
-                    @$_GET[$queryStringValKey[0]] = $queryStringValKey[1];
-                    @$queries[$queryStringValKey[0]] = $queryStringValKey[1];
-                }
-            }else{
-                $this->page = $Adr[1];
+        $QueryStringDetected = false;
+        $routeAddress = '';
+        foreach($Adr as $urlEl){
+            if(strpos($urlEl, '?') !== false) {
+                $queryStringArr = explode('?',$urlEl);
+                $urlEl = $queryStringArr[0];
+                $QueryStringDetected = true;
+                // break;
+                $queryString = $queryStringArr[1];
             }
+            $routeAddress .= $urlEl.'/';
         }
+        $this->page = trim($routeAddress,'/');
 
-        // for sub url support
-        $urlStr = implode('/',$Adr);
-        $urlStr = (ltrim($urlStr,'/'));
-        if(isset($routestr[$urlStr])){
-            $this->page =$urlStr;
-        }
-        // sub/iran
 
+       if($queryString){
+            $queryStringArr = explode('&',$queryString);
+            foreach($queryStringArr as $queryString){
+                $queryStringValKey = explode('=',$queryString);
+                @$_GET[$queryStringValKey[0]] = $queryStringValKey[1];
+                @$queries[$queryStringValKey[0]] = $queryStringValKey[1];
+            }
+       }
         // without route for home page
         if(strlen($Adr[1]) == 0){
             $this->page = '/';
@@ -92,6 +91,7 @@ class Router {
     */
     public function go($routesArr){
         $pageParamsArr = $this->route($routesArr);
+
         if(!isset($routesArr[$this->page])){
             require($this->notfoundAddress);
             exit;
@@ -106,7 +106,6 @@ class Router {
         $includePath = $assetsUrl.'/';
         $assetsUrl = $this->siteUrl.$assetsUrl.'/';
         // $routesArr[$this->page];
-
 
         require($routesArr[$this->page]);
         exit;

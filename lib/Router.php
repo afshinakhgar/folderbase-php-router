@@ -28,15 +28,54 @@ class Router {
     }
     public function route($routestr = '')
     {
-        
         $siteUrl = trim($this->siteUrl,'/');
 
         // full url of site with all parameters 
         $fullUrl = $this->url_protocol.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
         // get just parameters from url
         $param = str_replace($siteUrl,'',$fullUrl);
-        $Adr   = explode('/', $param);
 
+
+        foreach($routestr as $route => $route_file){
+            if(strpos($route,':') !== false){
+                // triming array element (params)
+                $routePart = array_map(function($arrEl){
+                    return trim($arrEl,'/');
+                },explode(':',$route));
+                $routeAddress = $routePart[0];
+                // parameter passing string /a/b/c/d/
+                $paramString = trim(str_replace($routePart[0],'',$param),'/');
+               
+                if($routeAddress == trim(str_replace($paramString,'',$param),'/')){
+                    // route address from first array element
+                    $params = explode('/',$paramString);
+                    $routeOpt[$route]['parameters'] = trim(str_replace($routePart[0],'',$param),'/');
+                    unset($routePart[0]);
+                    $routeOpt[$route]['params'] = $routePart; 
+                    $hasParam = true;
+                }
+            }
+        }
+        if(isset($hasParam) && isset($params) && is_array($params)){
+            for($i=0 ; $i < count($params) -1 ; $i++){
+                if($i % 2 == 0 ){
+                    if(isset($params[$i])){
+                        $pr[$params[$i]] = $params[$i+1];
+                    }
+                }
+            }
+            
+        }
+        // array of address
+        $Adr   = explode('/', $param);
+        if(isset($hasParam)){
+            // $param = str_replace($paramString,'',$param);
+            $Adr   = explode('/', trim($route,'/'));
+            // $Adr.
+            $GLOBALS['parameters'] = $pr;
+        }
+
+        
         // calculation of query strings in url string
         $QueryStringDetected = false;
         $routeAddress = '';
@@ -91,7 +130,6 @@ class Router {
     */
     public function go($routesArr){
         $pageParamsArr = $this->route($routesArr);
-
         if(!isset($routesArr[$this->page])){
             require($this->notfoundAddress);
             exit;
@@ -106,7 +144,8 @@ class Router {
         $includePath = $assetsUrl.'/';
         $assetsUrl = $this->siteUrl.$assetsUrl.'/';
         // $routesArr[$this->page];
-
+        GLOBAL $parameters ;
+        $parameters = $GLOBALS['parameters'];
         require($routesArr[$this->page]);
         exit;
     }

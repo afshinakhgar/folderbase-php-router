@@ -18,4 +18,5 @@ return $router->go(array(
 	'test'=> 'examples/test.php',
 	'sub/iran' => 'examples/sub/iran.php',
 	'sub/subsub/module' => 'examples/sub/subsub/module/module.php',
+	'sub/subsub/param/:param1/:param2/:param3' => 'examples/sub/subsub/module/param.php',
 ));
